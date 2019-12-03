@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button } from 'react-native';
+import { Platform, StyleSheet, Text, View, Dimensions, Alert } from 'react-native';
 import TextInput from './component/TextInput';
 import axios from 'axios'
 import { apiKey } from '../GlobalConfig'
 import UserElement from './component/UserElement';
 import Storage from '../Storage';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Header from './component/Header';
+
+//https://coolors.co/f2d7ee-d3bcc0-a5668b-69306d-0e103d
 
 export default class SettingsScreen extends Component {
 
@@ -43,24 +47,42 @@ export default class SettingsScreen extends Component {
       }
       Storage.saveUsers(newArr)
     }).catch((error) => {
-      console.log(error)
+        this.userNotFoundAlert();
     })
   }
 
+  onRemovePress = (index) => {
+    console.log(index)
+  }
+
   renderUsers = () => {
-    console.log(this.state.users)
-    return this.state.users.map((user) => (
-      <UserElement key={user.id} user={user}/>
+    return this.state.users.map((user, index) => (
+      <UserElement key={user.id} user={user} onRemovePress={() => this.onRemovePress(index)}/>
     ))
+  }
+
+  userNotFoundAlert = () => {
+    Alert.alert(
+      'User not found!',
+      'Try again with a different summoner name',
+      [
+        {text: 'OK', onPress: () => this.setState({userNameInput: ""})},
+      ],
+      { cancelable: false },
+    );
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{textAlign: 'center'}}>Summoner name to look for</Text>
-        <TextInput onChange={(value) => this.setState({userNameInput: value})}/>
-        <Button title={"Lookup"} onPress={this.lookup}/>
-        <Text style={{textAlign: 'center'}}>Summoners</Text>
+        <View style={styles.addSummonerContainer}>
+          <Header text={"Summoner name to look for"}/>
+          <TextInput onChangeText={(value) => this.setState({userNameInput: value})} value={this.state.userNameInput} placeholder="Summoner name"/>
+          <TouchableOpacity style={styles.button} onPress={this.lookup}>
+            <Text style={styles.buttonText}>LOOKUP</Text>
+          </TouchableOpacity>
+        </View>
+        <Header text={"Summoners"}/>
         {this.renderUsers()}
       </View>
     );
@@ -71,6 +93,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#0E103D',
+  }, 
+  button : {
+    height: 50,
+    width: Dimensions.get("window").width / 2,
+    margin: 4,
+    alignSelf: 'center', 
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#69306D',
+    borderRadius: 10
   },
+  buttonText: {
+    color: 'white'
+  },
+  headerText : {
+    textAlign: 'center',
+    backgroundColor: 'green'
+  },
+  addSummonerContainer: {
+    paddingBottom: 20
+  }
 });
