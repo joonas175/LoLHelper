@@ -8,12 +8,8 @@ export default function TextInput(props) {
 
     return (
         <TextInputNative 
+            {...props}
             style={styles.input} 
-            onChangeText={(value) => {
-                setText(value)
-
-                props.onChange(value)
-            }}
         />
     )
 }
@@ -22,8 +18,13 @@ const styles = StyleSheet.create({
     input: {
         height: 50,
         borderWidth: 2,
-        borderColor: 'blue',
+        borderColor: '#69306D',
+        backgroundColor: '#A5668B',
         margin: 4,
-        borderRadius: 10
+        borderRadius: 10,
+        color: "black",
+        fontSize: 14,
+        paddingLeft: 10
+
     }
 })
