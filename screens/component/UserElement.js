@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export default function UserElement(props) {
 
@@ -13,30 +14,43 @@ export default function UserElement(props) {
                 style={styles.image}
                 source={{uri: uri}}
             />
-            <Text>{user.name}</Text>
+            <Text style={styles.text}>{user.name}</Text>
+            <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
+                <Text>X</Text>
+            </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        height: 50,
-        backgroundColor: "lightgray",
+        height: 60,
+        backgroundColor: "#A5668B",
         borderColor: "black",
         borderWidth: 1,
         margin: 1,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: 5,
+        borderRadius: 10,
+        borderColor: "#69306D",
+        borderWidth: 2,
+        marginBottom: 5
     },
     image: {
         width: 50,
-        height: 50
-    },
-    input: {
         height: 50,
-        borderWidth: 2,
-        borderColor: 'blue',
-        margin: 4,
-        borderRadius: 10
+        borderRadius: 5
+    },
+    text: {
+        paddingLeft: 10,
+        fontSize: 16,
+        flex: 1
+    },
+    removeButton: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingRight: 10
     }
 })
