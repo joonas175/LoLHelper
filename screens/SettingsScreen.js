@@ -42,7 +42,8 @@ export default class SettingsScreen extends Component {
       let newArr = [response.data, ...this.state.users]
       if(response.status === 200) {
         this.setState({
-          users: newArr
+          users: newArr,
+          userNameInput: ""
         })
       }
       Storage.saveUsers(newArr)
@@ -52,7 +53,12 @@ export default class SettingsScreen extends Component {
   }
 
   onRemovePress = (index) => {
-    console.log(index)
+    let newArr = [...this.state.users.splice(index, 1)]
+    this.setState({
+      users: newArr
+    }, () => {
+      Storage.saveUsers(newArr)
+    })
   }
 
   renderUsers = () => {
@@ -107,10 +113,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white'
-  },
-  headerText : {
-    textAlign: 'center',
-    backgroundColor: 'green'
   },
   addSummonerContainer: {
     paddingBottom: 20
