@@ -48,6 +48,7 @@ export default class SettingsScreen extends Component {
       }
       Storage.saveUsers(newArr)
     }).catch((error) => {
+      console.log(error)
         this.userNotFoundAlert();
     })
   }
@@ -62,6 +63,8 @@ export default class SettingsScreen extends Component {
   }
 
   renderUsers = () => {
+    if(this.state.users == null || this.state.users.length < 1) return null;
+
     return this.state.users.map((user, index) => (
       <UserElement key={user.id} user={user} onRemovePress={() => this.onRemovePress(index)}/>
     ))
