@@ -9,16 +9,21 @@ export default function UserElement(props) {
     let uri = `https://cdn.communitydragon.org/latest/profile-icon/${user.profileIconId}`
 
     return (
-        <View style={styles.container}>
-            <Image 
-                style={styles.image}
-                source={{uri: uri}}
-            />
-            <Text style={styles.text}>{user.name}</Text>
-            <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
-                <Text>X</Text>
-            </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={(user) => props.onSelect(user)} disabled={!props.onSelect}>
+            <View style={styles.container}>
+                <Image 
+                    style={styles.image}
+                    source={{uri: uri}}
+                />
+                <Text style={styles.text}>{user.name}</Text>
+                {props.onRemovePress? (
+                    <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
+                        <Text>X</Text>
+                    </TouchableOpacity>
+                ) : null }
+                
+            </View>
+        </TouchableOpacity>
     )
 }
 
