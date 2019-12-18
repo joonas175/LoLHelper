@@ -18,8 +18,7 @@ export default class SettingsScreen extends Component {
     this.state = {
       userNameInput: "",
       region: "euw1",
-      users: [],
-      selectedUser: null
+      users: []
     }
   }
 
@@ -55,13 +54,15 @@ export default class SettingsScreen extends Component {
   }
 
   onRemovePress = (index) => {
+    console.log(index)
     let newArr
     if(this.state.users.length > 1) {
-      newArr = [...this.state.users.splice(index, 1)]
+      this.state.users.splice(index, 1)
+      newArr = [...this.state.users]
     } else {
       newArr = []
     }
-    
+    console.log(newArr)
     this.setState({
       users: newArr
     }, () => {
