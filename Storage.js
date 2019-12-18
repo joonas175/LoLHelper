@@ -1,11 +1,16 @@
-import { AsyncStorage } from 'react-native'
+//import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Storage {
 
     static getUsers(){
         return AsyncStorage.getItem("users").then((value) => {
-            if(value === null) return []
-            else JSON.parse(value)
+            if(value === null || value === undefined || value === "") {
+                return []
+            } else { 
+                return JSON.parse(value)
+            }
+            
         })
     }
 
