@@ -9,7 +9,7 @@ export default function UserElement(props) {
     let uri = `https://cdn.communitydragon.org/latest/profile-icon/${user.profileIconId}`
 
     return (
-        <TouchableOpacity onPress={(user) => props.onSelect(user)} disabled={!props.onSelect}>
+        <TouchableOpacity onPress={() => props.onSelect(user)} disabled={!props.onSelect}>
             <View style={styles.container}>
                 <Image 
                     style={styles.image}
