@@ -39,14 +39,17 @@ export default class SettingsScreen extends Component {
         withCredentials: true
       }}
     ).then((response) => {
-      let newArr = [response.data, ...this.state.users]
       if(response.status === 200) {
+        let summoner = response.data
+        summoner.region = region
+        let newArr = [summoner, ...this.state.users]
         this.setState({
           users: newArr,
           userNameInput: ""
         })
+        Storage.saveUsers(newArr)
       }
-      Storage.saveUsers(newArr)
+      
     }).catch((error) => {
       console.log(error)
         this.userNotFoundAlert();
