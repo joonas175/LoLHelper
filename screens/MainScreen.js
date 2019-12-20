@@ -6,6 +6,8 @@ import UserElement from './component/UserElement';
 import Storage from '../Storage';
 import { apiKey } from '../GlobalConfig'
 import axios from 'axios'
+import Header from './component/Header';
+import MatchInfo from './component/MatchInfo';
 
 export default class MainScreen extends Component {
 
@@ -14,7 +16,8 @@ export default class MainScreen extends Component {
 
     this.state = {
       inGame: false,
-      summoners: []
+      summoners: [],
+      selectedSummoner: null
     }
   }
 
@@ -52,20 +55,28 @@ export default class MainScreen extends Component {
 
   renderSummonerSelection = ({item, index}) => {
     console.log(item)
-    return (<UserElement key={item.id} user={item} onSelect={() => this.summonerSelected(item)}/>)
+    return (<UserElement key={item.id} user={item} onSelect={() => this.setState({selectedSummoner: item})}/>)
   }
-  
 
+  renderFlatList = () => {
+    return (
+      <View style={{flex: 1}}>
+        <Header text={"Find match"}/>
+        <FlatList
+            style={{flex: 1}}
+            data={this.state.summoners}
+            renderItem={this.renderSummonerSelection}
+            keyExtractor={(item) => item.id}
+          />
+      </View>
+    )
+  } 
+  
   render() {
     return (
       <View style={styles.container}>
         <NavigationEvents onWillFocus={this.updateSummoners}/>
-        <FlatList
-          style={{flex: 1}}
-          data={this.state.summoners}
-          renderItem={this.renderSummonerSelection}
-          keyExtractor={(item) => item.id}
-        />
+        {this.state.selectedSummoner === null ? this.renderFlatList() : <MatchInfo forUser={this.state.user} />}
       </View>
     );
   }
