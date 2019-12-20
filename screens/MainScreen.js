@@ -31,30 +31,13 @@ export default class MainScreen extends Component {
     })
   }
 
-  summonerSelected = (summoner) => {
-    console.log(summoner)
-    axios.get(`https://${summoner.region}.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner.id}`, { 
-      headers: {
-        "X-Riot-Token": apiKey,
-        withCredentials: true
-      }}
-    ).then((response) => {
-      console.log(response)
-    }).catch((error) => {
-      if(error.response == null){
-        console.log("no connection")
-      } else {
-        let { status } = error.response
-        if(status === 404){
-          console.log("match not found")
-        }
-      }
-      //console.log(error)
-    })
+  backToSelection = () => {
+    this.setState({selectedSummoner: null})
   }
 
+  
+
   renderSummonerSelection = ({item, index}) => {
-    console.log(item)
     return (<UserElement key={item.id} user={item} onSelect={() => this.setState({selectedSummoner: item})}/>)
   }
 
@@ -76,7 +59,10 @@ export default class MainScreen extends Component {
     return (
       <View style={styles.container}>
         <NavigationEvents onWillFocus={this.updateSummoners}/>
-        {this.state.selectedSummoner === null ? this.renderFlatList() : <MatchInfo forUser={this.state.user} />}
+        {this.state.selectedSummoner === null ? 
+          this.renderFlatList() : 
+          <MatchInfo summoner={this.state.selectedSummoner} onBackPress={() => this.backToSelection()} />
+          }
       </View>
     );
   }
