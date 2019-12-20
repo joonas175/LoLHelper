@@ -74,7 +74,7 @@ export default class MatchInfo extends Component{
         } else {
             return (<View style={{flex: 1, justifyContent: 'center'}}>
                 {this.state.matchInfo.participants.map((value) => (
-                    <ChampionElement participant={value} key={participant.summonerId}/>
+                    <ChampionElement participant={value} key={value.summonerId}/>
                 ))}
             </View>)
         }
