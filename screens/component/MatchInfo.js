@@ -11,7 +11,8 @@ export default class MatchInfo extends Component{
 
         this.state = {
             loading: true,
-            matchInfo: null
+            matchInfo: null,
+            retryTimer: null
         }
     }
 
@@ -33,8 +34,25 @@ export default class MatchInfo extends Component{
         this.props.onBackPress()
     }
 
-    lookForMatch = (summoner) => {
-        console.log(summoner)
+    retryTimer = () => {
+        if(this.state.retryTimer === 0){
+            this.lookForMatch()
+        } else {
+            setTimeout(() => {
+                this.setState({
+                    retryTimer: (this.state.retryTimer - 1)
+                }, this.retryTimer)
+            }, 1000)
+        }
+        
+    }
+
+    lookForMatch = () => {
+        this.setState({
+            loading: true
+        })
+        let { summoner } = this.props
+        
         axios.get(`https://${summoner.region}.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner.id}`, { 
           headers: {
             "X-Riot-Token": apiKey,
@@ -53,23 +71,26 @@ export default class MatchInfo extends Component{
             let { status } = error.response
             if(status === 404){
               console.log("match not found")
+              this.setState({
+                  retryTimer: 30
+              }, this.retryTimer)
             }
           }
           this.setState({
               loading: false,
               matchInfo: null
           })
-          this.retryTimer = setTimeout(() => {
 
-          }, 30000)
-          //console.log(error)
         })
     }
 
     renderMatchInfo = () => {
         if(this.state.matchInfo === null) {
             return (
-                <Text>Match not found :(</Text>
+                <View>
+                    <Text style={styles.text}>Match not found :(</Text>
+                    <Text style={styles.text}>{`Retry in ${this.state.retryTimer}`}</Text>
+                </View>
             )
         } else {
             return (<View style={{flex: 1, justifyContent: 'center'}}>
@@ -85,7 +106,7 @@ export default class MatchInfo extends Component{
             <View style={styles.container}>
 
                 {this.state.loading === true ? (
-                    <Text>Loading!</Text>
+                    <Text style={styles.text}>Loading!</Text>
                 ) : (
                 this.renderMatchInfo()
                 )}
@@ -111,5 +132,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#69306D',
         borderRadius: 10
-      },
+    },
+    text: {
+        textAlign: 'center',
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: 'white'
+    }
 })
