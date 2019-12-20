@@ -1,20 +1,34 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { View, StyleSheet, Text, Image } from 'react-native'
+import axios from 'axios'
 
 export default function ChampionElement(props){
 
+    const [championName, setChampionName] = useState("")
 
     let { participant } = props
 
-    let uri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/square`
+    let imageUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/square`
+
+    let dataUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/data`
+
+
+    //Lisää koko paskaan sqlite ja tallenna setit sinne, ettei tarvii kokoaika fetchata
+    axios.get(dataUri).then((response) => {
+        setChampionName(response.data.name)
+    })
+
 
     return (
         <View style={styles.container}>
             <Image 
                 style={styles.image}
-                source={{uri: uri}}
+                source={{uri: imageUri}}
             />
-            <Text style={styles.text}>{participant.summonerName}</Text>
+            <View>
+                <Text style={{...styles.text, fontSize: 16, fontWeight: 'bold'}}>{championName}</Text>
+                <Text style={styles.text}>{participant.summonerName}</Text>
+            </View>
             {props.onRemovePress? (
                 <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
                     <Text>X</Text>
@@ -47,7 +61,7 @@ const styles = StyleSheet.create({
     },
     text: {
         paddingLeft: 10,
-        fontSize: 16,
+        fontSize: 12,
         flex: 1
     },
     removeButton: {
