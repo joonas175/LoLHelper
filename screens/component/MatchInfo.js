@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';
 import axios from 'axios';
 import { apiKey } from '../../GlobalConfig';
+import ChampionElement from './ChampionElement';
 
 export default class MatchInfo extends Component{
 
@@ -9,7 +10,7 @@ export default class MatchInfo extends Component{
         super(props)
 
         this.state = {
-            loading: false,
+            loading: true,
             matchInfo: null
         }
     }
@@ -55,8 +56,8 @@ export default class MatchInfo extends Component{
             }
           }
           this.setState({
-              matchFound: false,
-              matchInfo: false
+              loading: false,
+              matchInfo: null
           })
           this.retryTimer = setTimeout(() => {
 
@@ -73,7 +74,7 @@ export default class MatchInfo extends Component{
         } else {
             return (<View style={{flex: 1, justifyContent: 'center'}}>
                 {this.state.matchInfo.participants.map((value) => (
-                    <View></View>
+                    <ChampionElement participant={value} key={participant.summonerId}/>
                 ))}
             </View>)
         }
