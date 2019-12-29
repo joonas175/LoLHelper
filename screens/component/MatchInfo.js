@@ -24,6 +24,9 @@ export default class MatchInfo extends Component{
 
     componentWillUnmount = () => {
         console.log("matchinfo unmounted")
+        if(this.timer) {
+            clearTimeout(this.timer)
+        }
     }
 
     onBackPress = () => {
@@ -38,7 +41,7 @@ export default class MatchInfo extends Component{
         if(this.state.retryTimer === 0){
             this.lookForMatch()
         } else {
-            setTimeout(() => {
+            this.timer = setTimeout(() => {
                 this.setState({
                     retryTimer: (this.state.retryTimer - 1)
                 }, this.retryTimer)
@@ -93,8 +96,11 @@ export default class MatchInfo extends Component{
                 </View>
             )
         } else {
+            let { matchInfo } = this.state
+            let ownTeam = matchInfo.participants.find((participant) => participant.summonerId === this.props.summoner.id).teamId
+
             return (<View style={{flex: 1, justifyContent: 'center'}}>
-                {this.state.matchInfo.participants.map((value) => (
+                {matchInfo.participants.filter((value) => value.teamId !== ownTeam).map((value) => (
                     <ChampionElement participant={value} key={value.summonerId}/>
                 ))}
             </View>)

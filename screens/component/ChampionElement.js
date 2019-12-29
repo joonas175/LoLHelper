@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react'
 import { View, StyleSheet, Text, Image } from 'react-native'
 import axios from 'axios'
+import summonerSpells from '../../data/summoner.json'
 
 export default function ChampionElement(props){
 
@@ -12,7 +13,19 @@ export default function ChampionElement(props){
 
     let dataUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/data`
 
+    
 
+    let spells = [participant.spell1Id, participant.spell2Id].map((key) => {
+        for(let summonerSpell in summonerSpells.data){
+            let sumSpel = summonerSpells.data[summonerSpell]
+            
+            if(sumSpel.key == key) return sumSpel
+        }
+    }).map((spell) => {
+        console.log(spell)
+    })
+
+    
     //Lisää koko paskaan sqlite ja tallenna setit sinne, ettei tarvii kokoaika fetchata
     axios.get(dataUri).then((response) => {
         setChampionName(response.data.name)
@@ -29,12 +42,9 @@ export default function ChampionElement(props){
                 <Text style={{...styles.text, fontSize: 16, fontWeight: 'bold'}}>{championName}</Text>
                 <Text style={styles.text}>{participant.summonerName}</Text>
             </View>
-            {props.onRemovePress? (
-                <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
-                    <Text>X</Text>
-                </TouchableOpacity>
-            ) : null }
-            
+            <View style={{}}>
+
+            </View>
         </View>
     )
 }
@@ -53,6 +63,9 @@ const styles = StyleSheet.create({
         borderColor: "#69306D",
         borderWidth: 2,
         marginBottom: 5
+    },
+    spellContainer: {
+
     },
     image: {
         width: 50,
