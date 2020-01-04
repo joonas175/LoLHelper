@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-nati
 import axios from 'axios';
 import { apiKey } from '../../GlobalConfig';
 import ChampionElement from './ChampionElement';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 
 export default class MatchInfo extends Component{
 
@@ -12,7 +13,8 @@ export default class MatchInfo extends Component{
         this.state = {
             loading: true,
             matchInfo: null,
-            retryTimer: null
+            retryTimer: null,
+            enemyTeam: null
         }
     }
 
@@ -62,11 +64,17 @@ export default class MatchInfo extends Component{
             withCredentials: true
           }}
         ).then((response) => {
-          console.log(response.data)
-          this.setState({
-              loading: false,
-              matchInfo: response.data
-          })
+            console.log(response.data)
+
+            let participants = response.data.participants
+            let ownTeamId = participants.find((participant) => participant.summonerId === this.props.summoner.id).teamId
+            let enemyTeam = participants.filter((value) => value.teamId !== ownTeamId)
+
+            this.setState({
+                loading: false,
+                matchInfo: response.data,
+                enemyTeam: enemyTeam
+            })
         }).catch((error) => {
           if(error.response == null){
             console.log("no connection")
@@ -97,13 +105,20 @@ export default class MatchInfo extends Component{
             )
         } else {
             let { matchInfo } = this.state
-            let ownTeam = matchInfo.participants.find((participant) => participant.summonerId === this.props.summoner.id).teamId
+            
 
-            return (<View style={{flex: 1, justifyContent: 'center'}}>
-                {matchInfo.participants.filter((value) => value.teamId !== ownTeam).map((value) => (
-                    <ChampionElement participant={value} key={value.summonerId}/>
-                ))}
-            </View>)
+            return ( 
+                    <DraggableFlatList
+                        style={{flex: 1}}
+                        data={this.state.enemyTeam}
+                        renderItem={({item, index, drag}) => {
+                            return (<ChampionElement participant={item} key={`item-${item.summonerId}`} onDrag={drag}/>)
+                        }}
+                        keyExtractor={(item, index) => `draggable-item-${item.summonerId}`}
+                        contentContainerStyle={{flex: 1, justifyContent: 'center'}}
+                        onDragEnd={({data}) => this.setState({enemyTeam: data})}
+                    />
+            )
         }
     }
 

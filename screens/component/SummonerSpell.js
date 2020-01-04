@@ -16,8 +16,6 @@ export default function SummonerSpell(props){
 
     const [cooldown, setCooldown] = useState(0)
 
-    //const [startTime, setTimer] = useState(null)
-
     useEffect(() => {
         let currentTime = Date.now()
 

@@ -7,12 +7,13 @@ import {
     ImageCacheProvider
 } from 'react-native-cached-image';
 import SummonerSpell from './SummonerSpell'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function ChampionElement(props){
 
     const [championName, setChampionName] = useState("")
 
-    let { participant } = props
+    let { participant, onDrag } = props
 
     let imageUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/square`
 
@@ -37,7 +38,7 @@ export default function ChampionElement(props){
 
     return (
         <ImageCacheProvider>
-            <View style={styles.container}>
+            <TouchableOpacity delayPressIn={500} delayLongPress={500} onLongPress={onDrag} style={styles.container}>
                 <CachedImage 
                     style={styles.image}
                     source={{uri: imageUri}}
@@ -49,7 +50,7 @@ export default function ChampionElement(props){
                 <View style={styles.summonerSpellContainer}>
                     {spells}
                 </View>
-            </View>
+            </TouchableOpacity>
         </ImageCacheProvider>
     )
 }
