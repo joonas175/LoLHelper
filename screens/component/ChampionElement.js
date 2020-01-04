@@ -2,6 +2,11 @@ import React, { Component, useState } from 'react'
 import { View, StyleSheet, Text, Image } from 'react-native'
 import axios from 'axios'
 import summonerSpells from '../../data/summoner.json'
+import {
+    CachedImage,
+    ImageCacheProvider
+} from 'react-native-cached-image';
+import SummonerSpell from './SummonerSpell'
 
 export default function ChampionElement(props){
 
@@ -21,9 +26,7 @@ export default function ChampionElement(props){
             
             if(sumSpel.key == key) return sumSpel
         }
-    }).map((spell) => {
-        console.log(spell)
-    })
+    }).map((spell) => <SummonerSpell key={participant + spell.id} spell={spell}/> )
 
     
     //Lisää koko paskaan sqlite ja tallenna setit sinne, ettei tarvii kokoaika fetchata
@@ -33,19 +36,21 @@ export default function ChampionElement(props){
 
 
     return (
-        <View style={styles.container}>
-            <Image 
-                style={styles.image}
-                source={{uri: imageUri}}
-            />
-            <View>
-                <Text style={{...styles.text, fontSize: 16, fontWeight: 'bold'}}>{championName}</Text>
-                <Text style={styles.text}>{participant.summonerName}</Text>
+        <ImageCacheProvider>
+            <View style={styles.container}>
+                <CachedImage 
+                    style={styles.image}
+                    source={{uri: imageUri}}
+                />
+                <View>
+                    <Text style={{...styles.text, fontSize: 16, fontWeight: 'bold'}}>{championName}</Text>
+                    <Text style={styles.text}>{participant.summonerName}</Text>
+                </View>
+                <View style={styles.summonerSpellContainer}>
+                    {spells}
+                </View>
             </View>
-            <View style={{}}>
-
-            </View>
-        </View>
+        </ImageCacheProvider>
     )
 }
 
@@ -71,6 +76,15 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 5
+    },
+    summonerSpell: {
+        width: 50,
+        height: 50,
+        borderRadius: 5
+    },
+    summonerSpellContainer: {
+        height: 60,
+        flexDirection: "row"
     },
     text: {
         paddingLeft: 10,

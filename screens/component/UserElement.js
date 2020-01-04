@@ -1,28 +1,30 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 export default function UserElement(props) {
 
-    let { user } = props
+    let { user, onDrag, onSelect } = props
 
     let uri = `https://cdn.communitydragon.org/latest/profile-icon/${user.profileIconId}`
 
     return (
-        <TouchableOpacity onPress={() => props.onSelect(user)} disabled={!props.onSelect}>
-            <View style={styles.container}>
-                <Image 
-                    style={styles.image}
-                    source={{uri: uri}}
-                />
-                <Text style={styles.text}>{user.name}</Text>
-                {props.onRemovePress? (
-                    <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
-                        <Text>X</Text>
-                    </TouchableOpacity>
-                ) : null }
-                
-            </View>
+        <TouchableOpacity onPress={() => onSelect(user)} disabled={!onSelect}>
+            <TouchableWithoutFeedback disabled={!onDrag} onLongPress={onDrag}>
+                <View style={styles.container}>
+                    <Image 
+                        style={styles.image}
+                        source={{uri: uri}}
+                    />
+                    <Text style={styles.text}>{user.name}</Text>
+                    {props.onRemovePress? (
+                        <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
+                            <Text>X</Text>
+                        </TouchableOpacity>
+                    ) : null }
+                    
+                </View>
+            </TouchableWithoutFeedback>
         </TouchableOpacity>
     )
 }

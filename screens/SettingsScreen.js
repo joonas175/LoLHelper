@@ -7,6 +7,7 @@ import UserElement from './component/UserElement';
 import Storage from '../Storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Header from './component/Header';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 
 //https://coolors.co/f2d7ee-d3bcc0-a5668b-69306d-0e103d
 
@@ -73,12 +74,13 @@ export default class SettingsScreen extends Component {
     })
   }
 
-  renderUsers = () => {
-    if(this.state.users == null || this.state.users.length < 1) return null;
+  onDragEnd = ({data}) => {
+    this.setState({ users: data })
+    Storage.saveUsers(data)
+  }
 
-    return this.state.users.map((user, index) => (
-      <UserElement key={user.id} user={user} onRemovePress={() => this.onRemovePress(index)}/>
-    ))
+  renderUser = ({item, index, drag, isActive}) => {
+    return (<UserElement key={item.id} user={item} onDrag={drag} onRemovePress={() => this.onRemovePress(index)}/>)
   }
 
   userNotFoundAlert = () => {
@@ -103,7 +105,13 @@ export default class SettingsScreen extends Component {
           </TouchableOpacity>
         </View>
         <Header text={"Summoners"}/>
-        {this.renderUsers()}
+        <DraggableFlatList
+          data={this.state.users}
+          renderItem={this.renderUser}
+          keyExtractor={(item, index) => item.id}
+          onDragEnd={this.onDragEnd}
+        />
+        
       </View>
     );
   }
