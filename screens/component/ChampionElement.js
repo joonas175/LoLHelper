@@ -38,7 +38,7 @@ export default function ChampionElement(props){
 
     return (
         <ImageCacheProvider>
-            <TouchableWithoutFeedback onLongPress={onDrag} style={styles.container}>
+            <TouchableWithoutFeedback onLongPress={onDrag} style={{...styles.container, opacity: (disabled ? 0.7 : 1)}}>
                 <CachedImage 
                     style={styles.image}
                     source={{uri: imageUri}}
