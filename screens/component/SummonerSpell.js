@@ -22,7 +22,7 @@ export default function SummonerSpell(props){
         if(currentTime < endTime){
             setTimeout(() => {
                 setCooldown((endTime - currentTime) / 1000)
-            }, 1000)
+            }, 200)
         } else {
             setCooldown(0)
         }
