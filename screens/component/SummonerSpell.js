@@ -30,6 +30,10 @@ export default function SummonerSpell(props){
     }, [endTime, cooldown])
 
     const startTimer = () => {
+        if(cooldown > 0){
+            setEndTime(0)
+            return
+        }
         setEndTime(Date.now() + (spell.cooldown[0] * 1000))
     }
 
