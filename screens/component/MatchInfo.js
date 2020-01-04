@@ -109,10 +109,11 @@ export default class MatchInfo extends Component{
 
             return ( 
                     <DraggableFlatList
+                        key={'champion-list'}
                         style={{flex: 1}}
                         data={this.state.enemyTeam}
-                        renderItem={({item, index, drag}) => {
-                            return (<ChampionElement participant={item} key={`item-${item.summonerId}`} onDrag={drag}/>)
+                        renderItem={({item, index, drag, isActive}) => {
+                            return (<ChampionElement participant={item} onDrag={drag} disabled={isActive}/>)
                         }}
                         keyExtractor={(item, index) => `draggable-item-${item.summonerId}`}
                         contentContainerStyle={{flex: 1, justifyContent: 'center'}}

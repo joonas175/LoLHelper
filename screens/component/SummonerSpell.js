@@ -10,7 +10,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function SummonerSpell(props){
 
-    let { spell } = props
+    let { spell, disabled } = props
 
     const [endTime, setEndTime] = useState(0)
 
@@ -35,7 +35,7 @@ export default function SummonerSpell(props){
 
     return (
         <ImageCacheProvider>
-            <TouchableOpacity onPress={startTimer}>
+            <TouchableOpacity onPress={startTimer} disabled={disabled}>
                 <View style={styles.container}>
                     <CachedImage
                         style={styles.image}
@@ -55,11 +55,12 @@ export default function SummonerSpell(props){
 
 const styles = StyleSheet.create({
     container: {
-        height: 50,
+        height: 70,
+        marginLeft: 5
     },
     image: {
-        width: 50,
-        height: 50,
+        width: 70,
+        height: 70,
         borderRadius: 5
     },
     text: {

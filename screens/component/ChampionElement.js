@@ -7,13 +7,13 @@ import {
     ImageCacheProvider
 } from 'react-native-cached-image';
 import SummonerSpell from './SummonerSpell'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export default function ChampionElement(props){
 
     const [championName, setChampionName] = useState("")
 
-    let { participant, onDrag } = props
+    let { participant, onDrag, disabled } = props
 
     let imageUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/square`
 
@@ -27,7 +27,7 @@ export default function ChampionElement(props){
             
             if(sumSpel.key == key) return sumSpel
         }
-    }).map((spell) => <SummonerSpell key={participant + spell.id} spell={spell}/> )
+    }).map((spell) => <SummonerSpell key={participant + spell.id} spell={spell} disabled={disabled}/> )
 
     
     //Lisää koko paskaan sqlite ja tallenna setit sinne, ettei tarvii kokoaika fetchata
@@ -38,26 +38,26 @@ export default function ChampionElement(props){
 
     return (
         <ImageCacheProvider>
-            <TouchableOpacity delayPressIn={500} delayLongPress={500} onLongPress={onDrag} style={styles.container}>
+            <TouchableWithoutFeedback delayLongPress={1000} onLongPress={onDrag} style={styles.container}>
                 <CachedImage 
                     style={styles.image}
                     source={{uri: imageUri}}
                 />
-                <View>
-                    <Text style={{...styles.text, fontSize: 16, fontWeight: 'bold'}}>{championName}</Text>
+                <View style={{alignSelf: 'stretch'}}>
+                    <Text style={styles.championText}>{championName}</Text>
                     <Text style={styles.text}>{participant.summonerName}</Text>
                 </View>
-                <View style={styles.summonerSpellContainer}>
+                <View style={styles.spellContainer}>
                     {spells}
                 </View>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
         </ImageCacheProvider>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        height: 60,
+        height: 80,
         backgroundColor: "#A5668B",
         borderColor: "black",
         borderWidth: 1,
@@ -70,12 +70,9 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         marginBottom: 5
     },
-    spellContainer: {
-
-    },
     image: {
-        width: 50,
-        height: 50,
+        width: 70,
+        height: 70,
         borderRadius: 5
     },
     summonerSpell: {
@@ -83,14 +80,22 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 5
     },
-    summonerSpellContainer: {
-        height: 60,
-        flexDirection: "row"
+    spellContainer: {
+        height: 80,
+        flexDirection: "row",
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center'
+    },
+    championText: {
+        paddingLeft: 10,
+        fontSize: 12, 
+        fontSize: 18, 
+        fontWeight: 'bold'
     },
     text: {
         paddingLeft: 10,
         fontSize: 12,
-        flex: 1
     },
     removeButton: {
         flex: 1,
