@@ -17,4 +17,19 @@ export default class Storage {
     static saveUsers(users){
         return AsyncStorage.setItem("users", JSON.stringify(users))
     }
+
+    static saveChampion(champion){
+        return AsyncStorage.setItem(`champion-${champion.id}`)
+    }
+
+    static getChampion(id){
+        return AsyncStorage.getItem(`champion-${id}`).then((value) => {
+            if(value === null || value === undefined || value === "") {
+                return null
+            } else { 
+                return JSON.parse(value)
+            }
+            
+        })
+    }
 }

@@ -9,10 +9,11 @@ import {
 import SummonerSpell from './SummonerSpell'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import BootsToggle from './BootsToggle.js';
+import Storage from "../../Storage"
 
 export default function ChampionElement(props){
 
-    const [championName, setChampionName] = useState("")
+    const [championName, setChampionName] = useState(null)
 
     const [boots, setBoots] = useState(false)
 
@@ -20,7 +21,6 @@ export default function ChampionElement(props){
 
     let imageUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/square`
 
-    let dataUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/data`
 
 
     let cdr = 1 + (boots? -0.1 : 0) + (gameMode === "ARAM" ? -0.4 : 0)
@@ -34,10 +34,24 @@ export default function ChampionElement(props){
     }).map((spell) => <SummonerSpell key={participant + spell.id} spell={spell} cdr={cdr} disabled={disabled}/> )
 
     
+    if(championName === null){
+        let champion = await Storage.getChampion(participant.championId)
+
+        if(champion){
+            setChampionName(champion.name)
+        } else {
+            let dataUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/data`
+
+            axios.get(dataUri).then((response) => {
+                setChampionName(response.data.name)
+                Storage.saveChampion(response.data)
+            })
+            
+            
+        }
+    }
     //Lisää koko paskaan sqlite ja tallenna setit sinne, ettei tarvii kokoaika fetchata
-    axios.get(dataUri).then((response) => {
-        setChampionName(response.data.name)
-    })
+    
 
 
     return (
