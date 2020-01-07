@@ -113,7 +113,7 @@ export default class MatchInfo extends Component{
                         style={{flex: 1}}
                         data={this.state.enemyTeam}
                         renderItem={({item, index, drag, isActive}) => {
-                            return (<ChampionElement participant={item} onDrag={drag} disabled={isActive}/>)
+                            return (<ChampionElement participant={item} onDrag={drag} disabled={isActive} gameMode={matchInfo.gameMode}/>)
                         }}
                         keyExtractor={(item, index) => `draggable-item-${item.summonerId}`}
                         contentContainerStyle={{flex: 1, justifyContent: 'center'}}
@@ -134,7 +134,7 @@ export default class MatchInfo extends Component{
                 )}
 
                 <TouchableOpacity style={styles.button} onPress={() => this.onBackPress()}>
-                    <Text>BACK</Text>
+                    <Text style={styles.buttonText}>BACK</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center', 
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#69306D',
+        backgroundColor: '#393e46',
         borderRadius: 10
     },
     text: {
@@ -160,5 +160,11 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         color: 'white'
+    },
+    buttonText: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#eeeeee'
     }
 })

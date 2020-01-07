@@ -9,6 +9,8 @@ import axios from 'axios'
 import Header from './component/Header';
 import MatchInfo from './component/MatchInfo';
 
+// https://colorhunt.co/palette/117601
+
 export default class MainScreen extends Component {
 
   constructor(props){
@@ -73,6 +75,6 @@ const styles = StyleSheet.create({
     flex: 1,
     //justifyContent: 'center',
     //alignItems: 'center',
-    backgroundColor: '#311e3e',
+    backgroundColor: '#232931',
   },
 });

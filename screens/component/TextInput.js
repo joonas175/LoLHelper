@@ -17,9 +17,9 @@ export default function TextInput(props) {
 const styles = StyleSheet.create({
     input: {
         height: 50,
-        borderWidth: 2,
-        borderColor: '#69306D',
-        backgroundColor: '#A5668B',
+        borderWidth: 1,
+        borderColor: 'black',
+        backgroundColor: '#eeeeee',
         margin: 4,
         borderRadius: 10,
         color: "black",

@@ -15,7 +15,7 @@ export default function Header(props) {
 const styles = StyleSheet.create({
     container: {
         height: 50,
-        backgroundColor: "#69306D",
+        backgroundColor: "#393e46",
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: "black",
@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,
-        color: '#D3BCC0'
+        color: '#eeeeee'
     }
 })

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import Ionicons  from 'react-native-vector-icons/Ionicons';
 
 export default function UserElement(props) {
 
@@ -19,7 +20,10 @@ export default function UserElement(props) {
                     <Text style={styles.text}>{user.name}</Text>
                     {props.onRemovePress? (
                         <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
-                            <Text>X</Text>
+                            {
+                                //<Text style={{color: "#eeeeee"}}>X</Text>
+                            }
+                            <Ionicons name={"md-close-circle-outline"} size={24} color={"red"}/>
                         </TouchableOpacity>
                     ) : null }
                     
@@ -32,7 +36,7 @@ export default function UserElement(props) {
 const styles = StyleSheet.create({
     container: {
         height: 60,
-        backgroundColor: "#A5668B",
+        backgroundColor: "#393e46",
         borderColor: "black",
         borderWidth: 1,
         margin: 1,
@@ -40,9 +44,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 5,
         borderRadius: 10,
-        borderColor: "#69306D",
-        borderWidth: 2,
-        marginBottom: 5
+        //borderColor: "#69306D",
+        //borderWidth: 2,
+        marginBottom: 5,
+        elevation: 1
     },
     image: {
         width: 50,
@@ -52,7 +57,8 @@ const styles = StyleSheet.create({
     text: {
         paddingLeft: 10,
         fontSize: 16,
-        flex: 1
+        flex: 1,
+        color: "#eeeeee"
     },
     removeButton: {
         flex: 1,

@@ -8,26 +8,30 @@ import {
 } from 'react-native-cached-image';
 import SummonerSpell from './SummonerSpell'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import BootsToggle from './BootsToggle.js';
 
 export default function ChampionElement(props){
 
     const [championName, setChampionName] = useState("")
 
-    let { participant, onDrag, disabled } = props
+    const [boots, setBoots] = useState(false)
+
+    let { participant, onDrag, disabled, gameMode } = props
 
     let imageUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/square`
 
     let dataUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/data`
 
-    
 
+    let cdr = 1 + (boots? -0.1 : 0) + (gameMode === "ARAM" ? -0.4 : 0)
+    
     let spells = [participant.spell1Id, participant.spell2Id].map((key) => {
         for(let summonerSpell in summonerSpells.data){
             let sumSpel = summonerSpells.data[summonerSpell]
             
             if(sumSpel.key == key) return sumSpel
         }
-    }).map((spell) => <SummonerSpell key={participant + spell.id} spell={spell} disabled={disabled}/> )
+    }).map((spell) => <SummonerSpell key={participant + spell.id} spell={spell} cdr={cdr} disabled={disabled}/> )
 
     
     //Lisää koko paskaan sqlite ja tallenna setit sinne, ettei tarvii kokoaika fetchata
@@ -48,6 +52,7 @@ export default function ChampionElement(props){
                     <Text style={styles.text}>{participant.summonerName}</Text>
                 </View>
                 <View style={styles.spellContainer}>
+                    <BootsToggle onToggle={(newVal) => setBoots(newVal)}/>
                     {spells}
                 </View>
             </TouchableWithoutFeedback>
@@ -58,15 +63,14 @@ export default function ChampionElement(props){
 const styles = StyleSheet.create({
     container: {
         height: 80,
-        backgroundColor: "#A5668B",
-        borderColor: "black",
+        backgroundColor: "#393e46",
         borderWidth: 1,
         margin: 1,
         flexDirection: 'row',
         alignItems: 'center',
         padding: 5,
         borderRadius: 10,
-        borderColor: "#69306D",
+        borderColor: "black",
         borderWidth: 2,
         marginBottom: 5
     },
@@ -91,11 +95,13 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         fontSize: 12, 
         fontSize: 18, 
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: "#eeeeee"
     },
     text: {
         paddingLeft: 10,
         fontSize: 12,
+        color: "#eeeeee"
     },
     removeButton: {
         flex: 1,

@@ -10,7 +10,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function SummonerSpell(props){
 
-    let { spell, disabled } = props
+    let { spell, disabled, cdr } = props
 
     const [endTime, setEndTime] = useState(0)
 
@@ -20,11 +20,15 @@ export default function SummonerSpell(props){
         let currentTime = Date.now()
 
         if(currentTime < endTime){
-            setTimeout(() => {
+            var timer = setTimeout(() => {
                 setCooldown((endTime - currentTime) / 1000)
             }, 200)
         } else {
             setCooldown(0)
+        }
+
+        return () => {
+            clearTimeout(timer)
         }
         
     }, [endTime, cooldown])
@@ -34,7 +38,7 @@ export default function SummonerSpell(props){
             setEndTime(0)
             return
         }
-        setEndTime(Date.now() + (spell.cooldown[0] * 1000))
+        setEndTime(Date.now() + (spell.cooldown[0] * cdr * 1000))
     }
 
     return (

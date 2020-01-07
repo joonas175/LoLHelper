@@ -80,7 +80,7 @@ export default class SettingsScreen extends Component {
   }
 
   renderUser = ({item, index, drag, isActive}) => {
-    return (<UserElement key={item.id} user={item} onDrag={drag} onRemovePress={() => this.onRemovePress(index)}/>)
+    return (<UserElement user={item} onDrag={drag} onRemovePress={() => this.onRemovePress(index)}/>)
   }
 
   userNotFoundAlert = () => {
@@ -108,7 +108,7 @@ export default class SettingsScreen extends Component {
         <DraggableFlatList
           data={this.state.users}
           renderItem={this.renderUser}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item, index) => `draggable-item-${item.id}`}
           onDragEnd={this.onDragEnd}
         />
         
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
-    backgroundColor: '#0E103D',
+    backgroundColor: '#232931',
   }, 
   button : {
     height: 50,
@@ -130,11 +130,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center', 
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#69306D',
+    backgroundColor: '#393e46',
     borderRadius: 10
   },
   buttonText: {
-    color: 'white'
+    color: '#eeeeee',
+    fontWeight: 'bold'
   },
   addSummonerContainer: {
     paddingBottom: 20
