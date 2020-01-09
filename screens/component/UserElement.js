@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import Ionicons  from 'react-native-vector-icons/Ionicons';
+import {
+    CachedImage,
+    ImageCacheProvider
+} from 'react-native-cached-image';
 
 export default function UserElement(props) {
 
@@ -10,26 +14,27 @@ export default function UserElement(props) {
     let uri = `https://cdn.communitydragon.org/latest/profile-icon/${user.profileIconId}`
 
     return (
-        <TouchableOpacity onPress={() => onSelect(user)} disabled={!onSelect}>
-            <TouchableWithoutFeedback disabled={!onDrag} onLongPress={onDrag}>
-                <View style={styles.container}>
-                    <Image 
-                        style={styles.image}
-                        source={{uri: uri}}
-                    />
-                    <Text style={styles.text}>{user.name}</Text>
-                    {props.onRemovePress? (
-                        <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
-                            {
-                                //<Text style={{color: "#eeeeee"}}>X</Text>
-                            }
-                            <Ionicons name={"md-close-circle-outline"} size={24} color={"red"}/>
-                        </TouchableOpacity>
-                    ) : null }
-                    
-                </View>
-            </TouchableWithoutFeedback>
-        </TouchableOpacity>
+        
+            <TouchableOpacity onPress={() => onSelect(user)} disabled={!onSelect}>
+                <TouchableWithoutFeedback disabled={!onDrag} onLongPress={onDrag}>
+                    <View style={styles.container}>
+                    <ImageCacheProvider>
+                        <CachedImage 
+                            style={styles.image}
+                            source={{uri: uri}}
+                        />
+                    </ImageCacheProvider>
+                        <Text style={styles.text}>{user.name}</Text>
+                        {props.onRemovePress? (
+                            <TouchableOpacity style={styles.removeButton} onPress={props.onRemovePress}>
+                                <Ionicons name={"md-close-circle-outline"} size={24} color={"red"}/>
+                            </TouchableOpacity>
+                        ) : null }
+                        
+                    </View>
+                </TouchableWithoutFeedback>
+            </TouchableOpacity>
+        
     )
 }
 
