@@ -57,7 +57,8 @@ export default class SettingsScreen extends Component {
     })
   }
 
-  onRemovePress = (index) => {
+  onRemovePress = (item) => {
+    let index = this.state.users.findIndex((value) => value === item)
     console.log(index)
     let newArr
     if(this.state.users.length > 1) {
@@ -80,7 +81,7 @@ export default class SettingsScreen extends Component {
   }
 
   renderUser = ({item, index, drag, isActive}) => {
-    return (<UserElement user={item} onDrag={drag} onRemovePress={() => this.onRemovePress(index)}/>)
+    return (<UserElement user={item} onDrag={drag} onRemovePress={() => this.onRemovePress(item)}/>)
   }
 
   userNotFoundAlert = () => {
