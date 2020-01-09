@@ -35,25 +35,22 @@ export default function ChampionElement(props){
 
     
     if(championName === null){
-        let champion = await Storage.getChampion(participant.championId)
-
-        if(champion){
-            setChampionName(champion.name)
-        } else {
-            let dataUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/data`
-
-            axios.get(dataUri).then((response) => {
-                setChampionName(response.data.name)
-                Storage.saveChampion(response.data)
-            })
-            
-            
-        }
-    }
-    //Lisää koko paskaan sqlite ja tallenna setit sinne, ettei tarvii kokoaika fetchata
+        Storage.getChampion(participant.championId).then((champion) => {
+            if(champion){
+                setChampionName(champion.name)
+            } else {
+                let dataUri = `https://cdn.communitydragon.org/latest/champion/${participant.championId}/data`
     
-
-
+                axios.get(dataUri).then((response) => {
+                    setChampionName(response.data.name)
+                    Storage.saveChampion(response.data)
+                })
+                
+                
+            }
+        })        
+    }
+    
     return (
         <ImageCacheProvider>
             <TouchableWithoutFeedback onLongPress={onDrag} style={{...styles.container, opacity: (disabled ? 0.7 : 1)}}>
