@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
 
+/**
+ * Simple header React component
+ * @param {*} props 
+ */
 export default function Header(props) {
 
     return (

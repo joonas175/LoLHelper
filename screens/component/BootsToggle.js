@@ -9,6 +9,14 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ionicons  from 'react-native-vector-icons/Ionicons';
 
+
+/**
+ * React functional component to render boots toggle icon.
+ * Props needed:
+ * toggle: Boolean if toggle is on or off
+ * onToggle: Function, what to do on toggle
+ * @param {*} props 
+ */
 export default function BootsToggle(props){
 
     let { onToggle, disabled } = props

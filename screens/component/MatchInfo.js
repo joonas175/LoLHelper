@@ -5,6 +5,9 @@ import { apiKey } from '../../GlobalConfig';
 import ChampionElement from './ChampionElement';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 
+/**
+ * React component to show match info. Handles fetching also.
+ */
 export default class MatchInfo extends Component{
 
     constructor(props){
@@ -31,6 +34,7 @@ export default class MatchInfo extends Component{
         }
     }
 
+    // Handle back press
     onBackPress = () => {
         //remove timers
         //remove intervals
@@ -58,6 +62,7 @@ export default class MatchInfo extends Component{
         })
         let { summoner } = this.props
         
+        // Fetch match info by summonerId
         axios.get(`https://${summoner.region}.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner.id}`, { 
           headers: {
             "X-Riot-Token": apiKey,
@@ -66,10 +71,12 @@ export default class MatchInfo extends Component{
         ).then((response) => {
             console.log(response.data)
 
+            // Filter data to include only enemy team
             let participants = response.data.participants
             let ownTeamId = participants.find((participant) => participant.summonerId === this.props.summoner.id).teamId
             let enemyTeam = participants.filter((value) => value.teamId !== ownTeamId)
-
+            
+            // Set filtered data to state and set loading to false
             this.setState({
                 loading: false,
                 matchInfo: response.data,
@@ -81,12 +88,14 @@ export default class MatchInfo extends Component{
           } else {
             let { status } = error.response
             if(status === 404){
-              console.log("match not found")
-              this.setState({
-                  retryTimer: 30
-              }, this.retryTimer)
+                // 404 is thrown if match is not found. Set retry timer
+                console.log("match not found")
+                this.setState({
+                    retryTimer: 30
+                }, this.retryTimer)
             }
           }
+          // On error, set loading to false and matchInfo to null
           this.setState({
               loading: false,
               matchInfo: null
@@ -95,6 +104,9 @@ export default class MatchInfo extends Component{
         })
     }
 
+    /**
+     * Function to render "Match not found" text or DraggableFlatList if matchInfo is set
+     */
     renderMatchInfo = () => {
         if(this.state.matchInfo === null) {
             return (
