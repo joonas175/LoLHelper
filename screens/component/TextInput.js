@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { TextInput as TextInputNative } from 'react-native-gesture-handler'
 
+/**
+ * Simple input component. Used mainly for consistent styling. 
+ * All props are passed to React Natives default TextInput, styling is overrided
+ * @param {*} props 
+ */
 export default function TextInput(props) {
-
-    const [text, setText] = useState("")
 
     return (
         <TextInputNative 

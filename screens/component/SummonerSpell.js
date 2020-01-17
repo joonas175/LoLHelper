@@ -8,6 +8,11 @@ import {
 } from 'react-native-cached-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+/**
+ * Timer component for each individual summoner spell. Handles presses, image fetching and actual timing.
+ * Needs spell and cdr from props. Spell object must have cooldown and id.
+ * @param {*} props 
+ */
 export default function SummonerSpell(props){
 
     let { spell, disabled, cdr } = props
@@ -16,6 +21,7 @@ export default function SummonerSpell(props){
 
     const [cooldown, setCooldown] = useState(0)
 
+    // Set timer, if endTime is set. Precise cooldown left is calculated every iteration.
     useEffect(() => {
         let currentTime = Date.now()
 
@@ -33,6 +39,7 @@ export default function SummonerSpell(props){
         
     }, [endTime, cooldown])
 
+    // Starts timer by setting endTime equal to current time + cooldown - cdr
     const startTimer = () => {
         if(cooldown > 0){
             setEndTime(0)

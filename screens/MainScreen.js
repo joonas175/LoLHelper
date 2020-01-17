@@ -11,6 +11,9 @@ import MatchInfo from './component/MatchInfo';
 
 // https://colorhunt.co/palette/117601
 
+/**
+ * Main screen of the app, which let's you select which summoner's match to look for.
+ */
 export default class MainScreen extends Component {
 
   constructor(props){
@@ -27,22 +30,33 @@ export default class MainScreen extends Component {
     console.log("Main screen mounted")
   }
 
+  // Get saved summoners from local storage.
   updateSummoners = async () => {
     this.setState({
       summoners: await Storage.getUsers()
     })
   }
 
+  /**
+   * Back handling. Set selected summoner to null, so render displays list of summoners instead of MatchInfo,
+   * as render uses conditional rendering.
+   */
   backToSelection = () => {
     this.setState({selectedSummoner: null})
   }
 
   
 
+  /**
+   * Render single user as UserElement.
+   */
   renderSummonerSelection = ({item, index}) => {
     return (<UserElement key={item.id} user={item} onSelect={() => this.setState({selectedSummoner: item})}/>)
   }
 
+  /**
+   * Render header and flatlist, which shows all summoners saved to localstorage.
+   */
   renderFlatList = () => {
     return (
       <View style={{flex: 1}}>

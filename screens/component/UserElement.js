@@ -7,6 +7,12 @@ import {
     ImageCacheProvider
 } from 'react-native-cached-image';
 
+/**
+ * React element to represent a single users information.
+ * Needs user from props. User object must have name and profileIconId.
+ * Icon is fetched from communitydragon.
+ * @param {*} props 
+ */
 export default function UserElement(props) {
 
     let { user, onDrag, onSelect } = props

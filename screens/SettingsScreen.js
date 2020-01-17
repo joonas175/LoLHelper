@@ -11,6 +11,9 @@ import DraggableFlatList from 'react-native-draggable-flatlist';
 
 //https://coolors.co/f2d7ee-d3bcc0-a5668b-69306d-0e103d
 
+/**
+ * Settings screen to add summoners to the app.
+ */
 export default class SettingsScreen extends Component {
 
   constructor(props){
@@ -23,10 +26,16 @@ export default class SettingsScreen extends Component {
     }
   }
 
+  // Get users from local Storage
   componentDidMount = () => {
     Storage.getUsers().then((value) => this.setState({users: value}))
   }
 
+  /**
+   * Lookup summoner by given username. Username is used only for display purposes, and all 
+   * other API calls need the encrypted summonerId, which makes this lookup necessary for 
+   * other functioning.
+   */
   lookup = () => {
 
     let { region, userNameInput } = this.state
@@ -42,12 +51,14 @@ export default class SettingsScreen extends Component {
     ).then((response) => {
       if(response.status === 200) {
         let summoner = response.data
+        // Save summoners region. This is needed when multiple regions come available in this app.
         summoner.region = region
         let newArr = [summoner, ...this.state.users]
         this.setState({
           users: newArr,
           userNameInput: ""
         })
+        // Save users to Storage.
         Storage.saveUsers(newArr)
       }
       
@@ -57,6 +68,11 @@ export default class SettingsScreen extends Component {
     })
   }
 
+  /**
+   * Remove single summoner from the list and save new list to Storage.
+   * Index can't be passed from DraggableFlatList (bug), so that's why 
+   * findIndex is used to find the correct summoner.
+   */
   onRemovePress = (item) => {
     let index = this.state.users.findIndex((value) => value === item)
     console.log(index)
@@ -75,15 +91,20 @@ export default class SettingsScreen extends Component {
     })
   }
 
+  /**
+   * Handles saving new order of summoners to state and Storage.
+   */
   onDragEnd = ({data}) => {
     this.setState({ users: data })
     Storage.saveUsers(data)
   }
 
+  // Render single Summoner
   renderUser = ({item, index, drag, isActive}) => {
     return (<UserElement user={item} onDrag={drag} onRemovePress={() => this.onRemovePress(item)}/>)
   }
 
+  // Show an alert, if user is not found with given username.
   userNotFoundAlert = () => {
     Alert.alert(
       'User not found!',
